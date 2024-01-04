@@ -8,13 +8,17 @@
         <table class="table table-hover">
             <thead>
                 <tr class="table-dark">
-                    <th scope="col" class="w-50">en-US</th>
-                    <th scope="col" class="w-50">ko-KR</th>
+                    <th scope="col" class="td-time">Time</th>
+                    <th scope="col" class="td-text">en-US</th>
+                    <th scope="col" class="td-text">
+                        ko-KR
+                        <button type="button" class="btn btn-info float-end" onclick="downloadScript()">Download Script</button>
+                    </th>
                 </tr>
             </thead>
             <tbody id="text-container">
             </tbody>
-        </table>
+        </table>        
         <div style="min-height: 50px;"></div>
         <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
             <div class="container-fluid">
@@ -37,8 +41,8 @@
 
         const textCandidates = document.querySelector("#text-candidates");
         const textContainer = document.querySelector("#text-container");
-        function processData(data){
-            if(data.isPartial) {
+        function processData(data) {
+            if (data.isPartial) {
                 // 1. intermidiates
                 textCandidates.textContent = data.text;
             } else {
@@ -46,15 +50,20 @@
                 let tr = document.createElement('tr');
 
                 // original text
+                let tdTime = document.createElement('td');
+                tdTime.textContent = moment().format('HH:mm:ss');
+                tr.appendChild(tdTime);
+
+                // original text
                 let td1 = document.createElement('td');
-                td1.textContent = data.text;                
+                td1.textContent = data.text;
                 tr.appendChild(td1);
 
                 // translated text
                 let td2 = document.createElement('td');
                 td2.textContent = data.translated;
                 tr.appendChild(td2);
-                
+
                 // add to container
                 textContainer.appendChild(tr);
 
@@ -65,14 +74,42 @@
             }
         }
 
+        function downloadScript(){
+            // Collect sctipt and translated
+            let contentArray = [["Time", "Scripted", "Translated"]];
+            textContainer.childNodes.forEach(tr => {
+                if(tr instanceof HTMLTableRowElement) {
+                    let rowContents = [];
+                    tr.childNodes.forEach(td => {
+                        let text = td.textContent;
+                        text = `"${text.replace('"','\'')}"`;
+                        rowContents.push(text);
+                    });
+                    contentArray.push(rowContents);
+                }
+            });
+
+            // create csv data
+            let csvContent = "data:text/csv;charset=utf-8," + contentArray.map(e => e.join(",")).join("\n");
+
+            // download
+            let encodedUri = encodeURI(csvContent);
+            let fileName = `live_transctiption_${moment().format('yyyyMMDD_hhmmss')}.csv`;
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link); 
+            link.click(); 
+        }
+
         (async function () {
             const ws = await connectToServer();
             ws.onmessage = (msg) => {
-                try{
-                    if(msg && msg.data) {
+                try {
+                    if (msg && msg.data) {
                         processData(JSON.parse(msg.data));
                     }
-                }catch(e){}
+                } catch (e) { }
             };
         })();
     </script>
@@ -80,10 +117,24 @@
         #text-container tr:last-child td {
             background-color: aqua;
         }
+        .container table th {
+            border: 1px solid white;
+        }
+        .td-time {
+            width: 14%;
+            text-align: center;
+            vertical-align: top;
+        }
+        .td-text {
+            width: 43%;
+            text-align: center;
+            vertical-align: top;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js"></script>
 </body>
