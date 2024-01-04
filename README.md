@@ -73,3 +73,6 @@ $ ffmpeg -f avfoundation -list_devices true -i ''
 ## 5. References
 * [Amazon-Transcribe-Streaming-Live-Subtitling](https://github.com/aws-samples/amazon-transcribe-streaming-live-closed-captions/tree/main)
 * [Real-time Audio to Text Transcription with Amazon Transcribe and WebSockets in Node.js](https://blog.devops.dev/real-time-audio-to-text-transcription-with-amazon-transcribe-and-websockets-in-node-js-1ae068a99cec)
+
+## 6. License 
+MIT-0
