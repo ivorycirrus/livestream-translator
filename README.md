@@ -2,13 +2,13 @@
 LiveStream audio translator for MacOS.
 The application runs with Amazon Transcribe and Amazon Translate.
 
-## Demo
+## 1. Demo
 ![demo](doc/demo.gif)
 
-## Architecture
+## 2. Architecture
 ![demo](doc/libestream_translate.png)
 
-## QuickStart
+## 3. QuickStart
 ### Requirements
 * node.js 18.x or higher
 * ffmpeg
@@ -48,7 +48,7 @@ $ npm install
 * play your audio source
 * Enjoy it
 
-## Configurations and Trouble Shootings
+## 4. (Optional) Configurations and Trouble Shootings
 
 ### Transcribe and Translate Configurations
 * If you want to change values, open and edit ```index.js``` file
@@ -70,6 +70,6 @@ $ ffmpeg -f avfoundation -list_devices true -i ''
 * open ```start.sh```
 * replace ```$AUDIO_DEVICE_ID``` for your BkackHole audio source index
 
-## References
+## 5. References
 * [Amazon-Transcribe-Streaming-Live-Subtitling](https://github.com/aws-samples/amazon-transcribe-streaming-live-closed-captions/tree/main)
 * [Real-time Audio to Text Transcription with Amazon Transcribe and WebSockets in Node.js](https://blog.devops.dev/real-time-audio-to-text-transcription-with-amazon-transcribe-and-websockets-in-node-js-1ae068a99cec)
