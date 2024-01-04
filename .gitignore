@@ -1,0 +1,15 @@
+# Local dirs 
+.idea
+.env.local
+.local
+.env
+
+# Dependency directories
+node_modules/
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+!.vscode/templates
+
+# Cache files
+.DS_Store
